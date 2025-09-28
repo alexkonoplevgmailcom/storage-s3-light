@@ -7,27 +7,28 @@
     
     <!-- NuGet Package Metadata -->
     <PackageId>NextGenPowerToys.Storage.S3.Light</PackageId>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <Authors>NextGen PowerToys Team</Authors>
     <Company>NextGen PowerToys</Company>
-    <Description>NextGen PowerToys - Lightweight AWS S3 file storage service with advanced resilience patterns using Polly. Supports MinIO compatibility and comprehensive health monitoring.</Description>
-    <PackageTags>nextgen;powertoys;aws;s3;storage;files;minio;resilience;polly;dotnet;light</PackageTags>
-    <PackageProjectUrl>https://github.com/fibi-poc-dev/was-s3-light</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/fibi-poc-dev/was-s3-light.git</RepositoryUrl>
+    <Description>Lightweight, resilient S3 storage library for .NET 8 with Polly resilience patterns, health checks, and comprehensive file management. Works with AWS S3, MinIO, and other S3-compatible storage.</Description>
+    <PackageTags>nextgen;powertoys;aws;s3;storage;files;minio;resilience;polly;dotnet8;light;cloud</PackageTags>
+    <PackageProjectUrl>https://github.com/alexkonoplevgmailcom/storage-s3-light</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/alexkonoplevgmailcom/storage-s3-light.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>
-      NextGen PowerToys S3 Light v1.4.0 features:
-      - File name-based identifiers (breaking change from GUID-based)
-      - AWS S3 and MinIO compatibility
+      NextGen PowerToys S3 Light v1.5.0 features:
+      - Production-ready with MIT License
+      - StorageService class for cleaner API
+      - File name-based identifiers for intuitive usage
+      - AWS S3 and MinIO full compatibility
       - Advanced resilience patterns with Polly v8
-      - Automatic bucket management
-      - Pre-signed URL support
-      - Health check integration
-      - Metadata tracking
+      - Built-in health monitoring and checks
+      - Pre-signed URL generation
+      - Comprehensive structured logging
       - Server-side encryption support
-      - .NET 8.0 compatibility
+      - .NET 8.0 optimized performance
     </PackageReleaseNotes>
     
     <!-- Generate package on build -->

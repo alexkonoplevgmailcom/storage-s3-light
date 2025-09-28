@@ -1,89 +1,46 @@
-# NextGen PowerToys S3 Light - Standalone S3 NuGet Package
+# NextGen PowerToys Storage S3 Light
 
-## Overview
+A lightweight, resilient S3 storage library for .NET 8 with advanced features including Polly resilience patterns, health checks, and comprehensive file management capabilities.
 
-This repository contains **NextGen PowerToys S3 Light** - a production-ready AWS S3 file storage service with file name-based identifiers. It provides comprehensive S3/MinIO storage functionality with advanced resilience patterns using Polly v8.
+## 🚀 Features
 
-## Package Information
+- **🛡️ Resilient Operations** - Built-in retry policies, circuit breakers, and timeout handling using Polly v8
+- **📁 File Management** - Upload, download, delete, and list files with metadata tracking
+- **🔗 Pre-signed URLs** - Generate secure, time-limited download URLs
+- **🏥 Health Checks** - Integrated health monitoring for S3 connectivity
+- **📊 Structured Logging** - Comprehensive logging with structured data
+- **⚡ High Performance** - Optimized for speed and reliability
+- **🔧 Easy Configuration** - Simple setup with appsettings.json or code configuration
+- **🪣 S3 Compatible** - Works with AWS S3, MinIO, and other S3-compatible storage
 
-- **Package ID**: `NextGenPowerToys.Storage.S3.Light`
-- **Current Version**: `1.4.0`
-- **Target Framework**: `.NET 8.0`
-- **License**: MIT
+## 📦 Installation
 
-## Features
+Install the NuGet package:
 
-### Core Functionality
-- ✅ **AWS S3 and MinIO Compatibility** - Works with both AWS S3 and MinIO storage
-- ✅ **File Upload/Download** - Complete file management operations
-- ✅ **Pre-signed URLs** - Secure temporary access to files
-- ✅ **Metadata Tracking** - File information and custom tags
-- ✅ **Automatic Bucket Management** - Creates buckets if they don't exist
-
-### Enterprise Features
-- ✅ **Advanced Resilience Patterns** - Polly v8 integration with retry, circuit breaker, and timeout
-- ✅ **Health Check Integration** - ASP.NET Core health checks support
-- ✅ **Structured Logging** - Microsoft.Extensions.Logging integration
-- ✅ **Dependency Injection** - Full DI container support
-- ✅ **Configuration Management** - IOptions pattern support
-- ✅ **Server-side Encryption** - Optional SSE support
-
-### Latest Updates (v1.1.0)
-- ✅ **AWS SDK 4.0.7.4** - Latest AWS S3 SDK version
-- ✅ **Microsoft.Extensions 9.0.9** - Updated to latest Microsoft packages
-- ✅ **Polly 8.6.4** - Latest Polly resilience library
-- ✅ **Enhanced Error Handling** - Improved error handling and logging
-
-## Project Structure
-
-```
-├── src/
-│   └── BFB.AWSS3Light.Storage.S3.Standalone/     # Main NuGet package project
-├── test/
-│   └── S3TestApp/                                  # Test console application
-├── nupkg/                                          # Built NuGet packages
-│   ├── BFB.AWSS3Light.Storage.S3.1.0.0.nupkg
-│   ├── BFB.AWSS3Light.Storage.S3.1.1.0.nupkg     # Latest version
-│   └── *.snupkg                                    # Symbol packages
-└── README.md
-```
-
-## Quick Start
-
-### 1. Install the NuGet Package
-
-#### From Local Build
-```bash
-# Install from local nupkg folder
-dotnet add package NextGenPowerToys.Storage.S3.Light --source ./nupkg
-```
-
-#### From NuGet.org (when published)
 ```bash
 dotnet add package NextGenPowerToys.Storage.S3.Light
 ```
 
-### 2. Configure Services
+Or via Package Manager Console:
 
-```csharp
-using BFB.AWSS3Light.Storage.S3.Standalone.Extensions;
-
-// In Program.cs or Startup.cs
-services.AddS3Storage(configuration);
+```powershell
+Install-Package NextGenPowerToys.Storage.S3.Light
 ```
 
-### 3. Configuration (appsettings.json)
+## ⚙️ Configuration
+
+### appsettings.json
 
 ```json
 {
   "S3Storage": {
     "AccessKeyId": "your-access-key",
     "SecretAccessKey": "your-secret-key",
-    "ServiceUrl": "https://s3.amazonaws.com",  // or MinIO endpoint
-    "DefaultBucketName": "your-bucket",
+    "ServiceUrl": "https://s3.amazonaws.com",
+    "DefaultBucketName": "my-bucket",
     "Region": "us-east-1",
-    "ForcePathStyle": false,                    // true for MinIO
-    "UseServerSideEncryption": false
+    "ForcePathStyle": false,
+    "UseServerSideEncryption": true
   },
   "S3Resilience": {
     "MaxRetryAttempts": 3,
@@ -97,22 +54,38 @@ services.AddS3Storage(configuration);
 }
 ```
 
-### 4. Use in Your Application
+### Dependency Injection Setup
 
 ```csharp
-using BFB.AWSS3Light.Storage.S3.Standalone.Abstractions.Interfaces;
+using NextGenPowerToys.Storage.S3.Light.Extensions;
 
-public class FileController : ControllerBase
+// Configure services
+services.AddS3Storage(configuration);
+
+// Add health checks (optional)
+services.AddHealthChecks()
+    .AddS3HealthCheck();
+```
+
+## 🎯 Usage
+
+### Basic File Operations
+
+```csharp
+using NextGenPowerToys.Storage.S3.Light.Abstractions.Interfaces;
+using NextGenPowerToys.Storage.S3.Light.Abstractions.DTOs;
+
+public class FileService
 {
     private readonly IFileStorageService _storageService;
 
-    public FileController(IFileStorageService storageService)
+    public FileService(IFileStorageService storageService)
     {
         _storageService = storageService;
     }
 
-    [HttpPost("upload")]
-    public async Task<IActionResult> UploadFile(IFormFile file)
+    // Upload a file
+    public async Task<string> UploadFileAsync(IFormFile file)
     {
         var request = new FileUploadRequest
         {
@@ -122,99 +95,194 @@ public class FileController : ControllerBase
         };
 
         var response = await _storageService.UploadFileAsync(request);
-        return Ok(response);
+        return response.Id; // Returns the file name as ID
     }
 
-    [HttpGet("download/{fileId}")]
-    public async Task<IActionResult> DownloadFile(string fileId)
+    // Download a file
+    public async Task<byte[]> DownloadFileAsync(string fileName)
     {
-        var response = await _storageService.DownloadFileAsync(fileId);
-        return File(response.Content, response.ContentType, response.FileName);
+        var response = await _storageService.DownloadFileAsync(fileName);
+        return response.Content;
+    }
+
+    // Get file metadata
+    public async Task<FileMetadata?> GetFileInfoAsync(string fileName)
+    {
+        return await _storageService.GetFileMetadataAsync(fileName);
+    }
+
+    // Generate download URL
+    public async Task<string> GetDownloadUrlAsync(string fileName)
+    {
+        return await _storageService.GenerateDownloadUrlAsync(fileName, 60);
+    }
+
+    // List all files
+    public async Task<IEnumerable<FileMetadata>> GetAllFilesAsync()
+    {
+        return await _storageService.GetAllFilesAsync();
+    }
+
+    // Delete a file
+    public async Task<bool> DeleteFileAsync(string fileName)
+    {
+        return await _storageService.DeleteFileAsync(fileName);
     }
 }
 ```
 
-## MinIO Configuration
-
-For MinIO compatibility, use these settings:
-
-```json
-{
-  "S3Storage": {
-    "AccessKeyId": "minioadmin",
-    "SecretAccessKey": "minioadmin123",
-    "ServiceUrl": "http://localhost:9000",
-    "DefaultBucketName": "test-bucket",
-    "Region": "us-east-1",
-    "ForcePathStyle": true,              // Required for MinIO
-    "UseServerSideEncryption": false
-  }
-}
-```
-
-## Testing
-
-The repository includes a comprehensive test console application that demonstrates:
-
-- ✅ **Real File Operations** - Creates actual files on disk
-- ✅ **Upload/Download Testing** - Full round-trip testing
-- ✅ **Content Verification** - Ensures data integrity
-- ✅ **Pre-signed URL Generation** - Tests URL generation
-- ✅ **Selective Operations** - Tests partial file operations
-- ✅ **Health Check Validation** - Verifies service health
-
-### Running Tests
-
-```bash
-cd test/S3TestApp
-dotnet run
-```
-
-## Package Dependencies
-
-| Package | Version | Purpose |
-|---------|---------|---------|
-| AWSSDK.S3 | 4.0.7.4 | AWS S3 SDK (Latest) |
-| Polly | 8.6.4 | Resilience patterns |
-| Microsoft.Extensions.* | 9.0.9 | Configuration, DI, Logging |
-| Microsoft.AspNetCore.Http.Features | 5.0.17 | IFormFile support |
-
-## Health Checks
-
-The package includes built-in health checks:
+### Advanced Configuration
 
 ```csharp
-// Automatically registered with AddS3Storage()
-services.AddHealthChecks(); // Will include S3 health check
+// Manual configuration
+services.AddS3Storage(s3Settings =>
+{
+    s3Settings.AccessKeyId = "your-key";
+    s3Settings.SecretAccessKey = "your-secret";
+    s3Settings.Region = "us-east-1";
+    s3Settings.DefaultBucketName = "my-bucket";
+}, resilienceSettings =>
+{
+    resilienceSettings.MaxRetryAttempts = 5;
+    resilienceSettings.CircuitBreakerFailureThreshold = 3;
+});
+```
 
-// Check health endpoint
+## 🏥 Health Checks
+
+The library includes built-in health checks to monitor S3 connectivity:
+
+```csharp
+// Add health checks
+services.AddHealthChecks()
+    .AddS3HealthCheck("s3-storage");
+
+// In Startup.cs or Program.cs
 app.MapHealthChecks("/health");
 ```
 
-## Resilience Patterns
+Health check endpoint returns:
+- ✅ **Healthy** - S3 bucket is accessible
+- ❌ **Unhealthy** - Connection issues or bucket not accessible
 
-### Retry Policy
-- **Max Attempts**: 3 (configurable)
-- **Backoff**: Exponential with jitter
-- **Base Delay**: 1 second (configurable)
+## 🛠️ Resilience Features
+
+### Retry Policies
+- **Exponential Backoff** - Intelligent delay between retries
+- **Max Attempts** - Configurable retry limits
+- **Jittered Delays** - Prevents thundering herd problems
 
 ### Circuit Breaker
-- **Failure Threshold**: 5 consecutive failures
-- **Break Duration**: 30 seconds
-- **Auto-recovery**: Automatic
+- **Failure Threshold** - Opens circuit after consecutive failures
+- **Recovery Time** - Automatic circuit recovery
+- **Fast Fail** - Immediate failure during circuit open state
 
-### Timeout Policy
-- **Request Timeout**: 60 seconds (configurable)
-- **Applies to**: All S3 operations
+### Timeout Handling
+- **Request Timeouts** - Per-operation timeout configuration
+- **Cancellation Support** - Proper cancellation token handling
 
-## Contributing
+## 📊 Logging
 
-This is a standalone extracted package. For the full BFB template implementation, see the [BFB Template repository](https://github.com/fibi-poc-dev/bfb-template-ng).
+The library provides structured logging for all operations:
 
-## License
+```csharp
+// Example log output
+[INFO] File uploaded to S3 and metadata stored. FileName: document.pdf
+[INFO] File downloaded from S3. FileName: document.pdf, Size: 1024 bytes
+[WARN] Retry attempt 2/3 for S3 operation. FileName: document.pdf
+[ERROR] S3 operation failed after all retry attempts. FileName: document.pdf
+```
 
-MIT License - see the package metadata for full license terms.
+## 🔧 Supported Storage Providers
+
+- **Amazon S3** - Native AWS S3 support
+- **MinIO** - Self-hosted S3-compatible storage
+- **DigitalOcean Spaces** - S3-compatible object storage
+- **Any S3-Compatible Storage** - Standard S3 API compliance
+
+## 📋 Requirements
+
+- **.NET 8.0** or higher
+- **AWS SDK for .NET** (included)
+- **Polly v8** for resilience (included)
+- **Microsoft.Extensions.*** packages (included)
+
+## 🎮 Quick Start Example
+
+1. **Install the package**:
+   ```bash
+   dotnet add package NextGenPowerToys.Storage.S3.Light
+   ```
+
+2. **Configure your app**:
+   ```csharp
+   services.AddS3Storage(configuration);
+   ```
+
+3. **Use in your controller**:
+   ```csharp
+   [ApiController]
+   public class FilesController : ControllerBase
+   {
+       private readonly IFileStorageService _storage;
+       
+       public FilesController(IFileStorageService storage)
+       {
+           _storage = storage;
+       }
+       
+       [HttpPost("upload")]
+       public async Task<IActionResult> Upload(IFormFile file)
+       {
+           var request = new FileUploadRequest { File = file };
+           var result = await _storage.UploadFileAsync(request);
+           return Ok(new { FileId = result.Id, Size = result.FileSize });
+       }
+   }
+   ```
+
+## 📚 API Reference
+
+### IFileStorageService Methods
+
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `UploadFileAsync(request)` | Upload a file to storage | `FileUploadResponse` |
+| `DownloadFileAsync(fileName)` | Download file by name | `FileDownloadResponse` |
+| `GetFileMetadataAsync(fileName)` | Get file metadata | `FileMetadata?` |
+| `GetAllFilesAsync()` | List all files | `IEnumerable<FileMetadata>` |
+| `DeleteFileAsync(fileName)` | Delete a file | `bool` |
+| `GenerateDownloadUrlAsync(fileName, expiry)` | Create pre-signed URL | `string` |
+
+### Configuration Options
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `AccessKeyId` | S3 access key | Required |
+| `SecretAccessKey` | S3 secret key | Required |
+| `Region` | AWS region | `us-east-1` |
+| `DefaultBucketName` | Default bucket | Required |
+| `ForcePathStyle` | Use path-style URLs | `false` |
+| `UseServerSideEncryption` | Enable SSE | `false` |
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit pull requests, report bugs, or suggest features.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🏷️ Version
+
+Current version: **1.4.0**
+
+## 🔗 Links
+
+- **Repository**: [https://github.com/alexkonoplevgmailcom/storage-s3-light](https://github.com/alexkonoplevgmailcom/storage-s3-light)
+- **NuGet Package**: [NextGenPowerToys.Storage.S3.Light](https://www.nuget.org/packages/NextGenPowerToys.Storage.S3.Light)
+- **Issues**: [Report a bug or request a feature](https://github.com/alexkonoplevgmailcom/storage-s3-light/issues)
 
 ---
 
-**Ready for Production** ✅ | **Latest AWS SDK** ✅ | **Comprehensive Testing** ✅ | **Enterprise Features** ✅
+**NextGen PowerToys** - Empowering developers with powerful, easy-to-use tools. 🚀
