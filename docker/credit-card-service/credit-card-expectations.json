@@ -1,0 +1,182 @@
+[
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/api/creditcard/validate",
+      "headers": {
+        "Content-Type": ["application/json"]
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "X-Fibi-Transaction-Id": ["${json-unit.any-string}"]
+      },
+      "body": {
+        "isValid": true,
+        "cardType": "Visa",
+        "issuingBank": "First National Bank",
+        "countryCode": "US",
+        "riskScore": 25,
+        "creditLimit": 10000.00,
+        "currentBalance": 2500.00,
+        "availableBalance": 7500.00,
+        "responseTimestamp": "${json-unit.any-string}",
+        "transactionId": "${json-unit.any-string}",
+        "errorMessage": ""
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/api/creditcard/validate",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "cardNumber": "4111111111111111",
+        "expiryMonth": 12,
+        "expiryYear": 2025,
+        "cvv": "123"
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "X-Fibi-Transaction-Id": ["mock-txn-001"]
+      },
+      "body": {
+        "isValid": true,
+        "cardType": "Visa",
+        "issuingBank": "Chase Bank",
+        "countryCode": "US",
+        "riskScore": 15,
+        "creditLimit": 15000.00,
+        "currentBalance": 3500.00,
+        "availableBalance": 11500.00,
+        "responseTimestamp": "2024-01-15T10:30:00Z",
+        "transactionId": "ext-txn-visa-001",
+        "errorMessage": ""
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/api/creditcard/validate",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "cardNumber": "5555555555554444",
+        "expiryMonth": 8,
+        "expiryYear": 2026,
+        "cvv": "456"
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "X-Fibi-Transaction-Id": ["mock-txn-002"]
+      },
+      "body": {
+        "isValid": true,
+        "cardType": "MasterCard",
+        "issuingBank": "Bank of America",
+        "countryCode": "US",
+        "riskScore": 35,
+        "creditLimit": 8000.00,
+        "currentBalance": 6500.00,
+        "availableBalance": 1500.00,
+        "responseTimestamp": "2024-01-15T10:31:00Z",
+        "transactionId": "ext-txn-mc-002",
+        "errorMessage": ""
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/api/creditcard/validate",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "cardNumber": "4000000000000002",
+        "expiryMonth": 3,
+        "expiryYear": 2024,
+        "cvv": "789"
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "X-Fibi-Transaction-Id": ["mock-txn-003"]
+      },
+      "body": {
+        "isValid": false,
+        "cardType": "Visa",
+        "issuingBank": "Wells Fargo",
+        "countryCode": "US",
+        "riskScore": 85,
+        "creditLimit": 5000.00,
+        "currentBalance": 5000.00,
+        "availableBalance": 0.00,
+        "responseTimestamp": "2024-01-15T10:32:00Z",
+        "transactionId": "ext-txn-visa-003",
+        "errorMessage": "Card has expired"
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "POST",
+      "path": "/api/creditcard/validate",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "cardNumber": "1234567890123456"
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "isValid": false,
+        "cardType": "Unknown",
+        "issuingBank": "",
+        "countryCode": "",        "riskScore": 100,
+        "creditLimit": 0.00,
+        "currentBalance": 0.00,
+        "availableBalance": 0.00,
+        "responseTimestamp": "2024-01-15T10:33:00Z",
+        "transactionId": "ext-txn-invalid-004",
+        "errorMessage": "Invalid card number"
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/api/health"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "body": {
+        "status": "healthy",
+        "timestamp": "2024-01-15T10:30:00Z"
+      }
+    }
+  }
+]

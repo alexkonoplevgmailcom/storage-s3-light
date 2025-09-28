@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: bfb-awss3light-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: P@ssw0rd!123
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - bfb-awss3light-network
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "P@ssw0rd!123" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  sqlserver_data:
+    driver: local
+
+networks:
+  bfb-awss3light-network:
+    driver: bridge
+    name: bfb-awss3light-network

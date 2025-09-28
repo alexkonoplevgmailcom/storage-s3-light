@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- OS-conditional DB2 packages - MANDATORY for all BFB template projects -->
+    <PackageReference Include="Net.IBM.Data.Db2" Version="8.0.0.200" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <PackageReference Include="Net.IBM.Data.Db2-lnx" Version="8.0.0.200" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+    <PackageReference Include="Net.IBM.Data.Db2-osx" Version="8.0.0.200" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+    
+    <!-- Configuration and logging (use .NET 8 versions) -->
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Reference to BFB AWSS3Light DB2 DataAccess project -->
+    <ProjectReference Include="..\..\..\src\BFB.AWSS3Light.DataAccess.DB2\BFB.AWSS3Light.DataAccess.DB2.csproj" />
+    <ProjectReference Include="..\..\..\src\BFB.AWSS3Light.Abstractions\BFB.AWSS3Light.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
