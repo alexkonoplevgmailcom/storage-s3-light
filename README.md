@@ -1,14 +1,14 @@
-# BFB AWSS3Light Storage - Standalone S3 NuGet Package
+# NextGen PowerToys S3 Light - Standalone S3 NuGet Package
 
 ## Overview
 
-This repository contains a **production-ready AWS S3 file storage service** that has been extracted as a standalone NuGet package. It provides comprehensive S3/MinIO storage functionality with advanced resilience patterns using Polly v8.
+This repository contains **NextGen PowerToys S3 Light** - a production-ready AWS S3 file storage service with file name-based identifiers. It provides comprehensive S3/MinIO storage functionality with advanced resilience patterns using Polly v8.
 
 ## Package Information
 
-- **Package ID**: `BFB.AWSS3Light.Storage.S3`
-- **Current Version**: `1.1.0`
-- **Target Framework**: `.NET 9.0`
+- **Package ID**: `NextGenPowerToys.Storage.S3.Light`
+- **Current Version**: `1.4.0`
+- **Target Framework**: `.NET 8.0`
 - **License**: MIT
 
 ## Features
@@ -55,12 +55,12 @@ This repository contains a **production-ready AWS S3 file storage service** that
 #### From Local Build
 ```bash
 # Install from local nupkg folder
-dotnet add package BFB.AWSS3Light.Storage.S3 --source ./nupkg
+dotnet add package NextGenPowerToys.Storage.S3.Light --source ./nupkg
 ```
 
 #### From NuGet.org (when published)
 ```bash
-dotnet add package BFB.AWSS3Light.Storage.S3
+dotnet add package NextGenPowerToys.Storage.S3.Light
 ```
 
 ### 2. Configure Services

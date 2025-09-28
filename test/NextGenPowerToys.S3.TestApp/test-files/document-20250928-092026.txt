@@ -1,0 +1,4 @@
+Document Test File #1
+Created: 9/28/2025 9:20:26 AM
+Content: This is the first test document for NextGen PowerToys S3 Light testing.
+Random ID: 3c1f47df-45f8-477b-a0fe-91a99d4b1bc6

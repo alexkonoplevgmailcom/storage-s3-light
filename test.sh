@@ -5,7 +5,7 @@
 
 set -e
 
-echo "🧪 Running BFB AWSS3Light Storage S3 Tests..."
+echo "🧪 Running NextGen PowerToys S3 Light Tests..."
 echo "=============================================="
 
 # Check if MinIO is running
@@ -22,16 +22,16 @@ else
 fi
 
 # Change to test directory
-cd "$(dirname "$0")/test/S3TestApp"
+cd "$(dirname "$0")/test/NextGenPowerToys.S3.TestApp"
 
 # Build test app
-echo "🔨 Building test application..."
-dotnet build --verbosity minimal
+echo "🔨 Building test application with .NET 8..."
+/opt/homebrew/Cellar/dotnet@8/8.0.18/bin/dotnet build --verbosity minimal
 
 # Run tests
-echo "🚀 Running S3 storage tests..."
+echo "🚀 Running S3 storage tests with .NET 8..."
 echo ""
-dotnet run
+echo '' | /opt/homebrew/Cellar/dotnet@8/8.0.18/bin/dotnet run
 
 echo ""
 echo "🎉 Tests completed!"

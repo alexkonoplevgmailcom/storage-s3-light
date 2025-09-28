@@ -5,11 +5,11 @@
 
 set -e
 
-echo "🏗️  Building BFB AWSS3Light Storage S3 Package..."
-echo "=================================================="
+echo "🏗️  Building NextGen PowerToys S3 Light Package..."
+echo "================================================="
 
 # Change to project directory
-cd "$(dirname "$0")/src/BFB.AWSS3Light.Storage.S3.Standalone"
+cd "$(dirname "$0")/src/NextGenPowerToys.Storage.S3.Light"
 
 # Clean previous builds
 echo "🧹 Cleaning previous builds..."
@@ -29,7 +29,7 @@ echo ""
 # List generated packages
 cd ../../nupkg
 echo "📋 Generated packages:"
-ls -la *.nupkg *.snupkg 2>/dev/null | grep "BFB.AWSS3Light.Storage.S3" || echo "No packages found"
+ls -la *.nupkg *.snupkg 2>/dev/null | grep "NextGenPowerToys.Storage.S3.Light" || echo "No packages found"
 
 echo ""
 echo "🎉 Package build complete!"
