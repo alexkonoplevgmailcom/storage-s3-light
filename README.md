@@ -11,7 +11,7 @@ A lightweight, resilient S3 storage library for .NET 8 with advanced features in
 - **📊 Structured Logging** - Comprehensive logging with structured data
 - **⚡ High Performance** - Optimized for speed and reliability
 - **🔧 Easy Configuration** - Simple setup with appsettings.json or code configuration
-- **🪣 S3 Compatible** - Works with AWS S3, MinIO, and other S3-compatible storage
+- **🪣 Universal S3 Compatibility** - Works with ANY S3-compatible storage including AWS S3, MinIO, NetApp StorageGRID, DigitalOcean Spaces, and more
 
 ## 📦 Installation
 
@@ -195,10 +195,36 @@ The library provides structured logging for all operations:
 
 ## 🔧 Supported Storage Providers
 
-- **Amazon S3** - Native AWS S3 support
-- **MinIO** - Self-hosted S3-compatible storage
-- **DigitalOcean Spaces** - S3-compatible object storage
-- **Any S3-Compatible Storage** - Standard S3 API compliance
+**Universal S3 Compatibility** - Works with ANY storage that implements the S3 API:
+
+### ☁️ **Cloud Providers**
+- **Amazon S3** - Native AWS S3 support with all features
+- **DigitalOcean Spaces** - Full S3 API compatibility
+- **Google Cloud Storage** - S3-compatible interoperability mode
+- **Microsoft Azure Blob** - S3 API gateway support
+- **IBM Cloud Object Storage** - S3-compatible interface
+- **Oracle Cloud Infrastructure** - S3-compatible API
+
+### 🏢 **Enterprise Storage**
+- **NetApp StorageGRID** - Enterprise S3-compatible object storage
+- **Dell EMC ECS** - S3-compatible enterprise storage platform  
+- **HPE Scality RING** - S3-compatible distributed storage
+- **Hitachi Content Platform** - S3 API support
+- **Pure Storage FlashBlade** - S3-compatible NAS platform
+
+### 🏠 **Self-Hosted Solutions**
+- **MinIO** - High-performance S3-compatible server
+- **Ceph RadosGW** - S3-compatible interface for Ceph
+- **OpenStack Swift** - S3 API compatibility layer
+- **SeaweedFS** - S3-compatible distributed file system
+- **Rook Ceph** - Kubernetes-native S3-compatible storage
+
+### 🔌 **Requirements**
+Any storage system that implements the **AWS S3 REST API** including:
+- Standard S3 operations (GET, PUT, DELETE, LIST)
+- Bucket operations and management  
+- Pre-signed URL generation
+- Multipart upload support (optional but recommended)
 
 ## 📋 Requirements
 
@@ -306,6 +332,36 @@ The library provides structured logging for all operations:
     "DefaultBucketName": "dev-bucket",
     "Region": "us-east-1",
     "ForcePathStyle": true,
+    "UseServerSideEncryption": false
+  }
+}
+```
+
+**NetApp StorageGRID Enterprise:**
+```json
+{
+  "S3Storage": {
+    "AccessKeyId": "your-netapp-access-key",
+    "SecretAccessKey": "your-netapp-secret-key",
+    "ServiceUrl": "https://storagegrid.company.com",
+    "DefaultBucketName": "enterprise-data",
+    "Region": "us-east-1",
+    "ForcePathStyle": true,
+    "UseServerSideEncryption": true
+  }
+}
+```
+
+**DigitalOcean Spaces:**
+```json
+{
+  "S3Storage": {
+    "AccessKeyId": "your-spaces-key",
+    "SecretAccessKey": "your-spaces-secret",
+    "ServiceUrl": "https://nyc3.digitaloceanspaces.com",
+    "DefaultBucketName": "my-app-storage",
+    "Region": "nyc3",
+    "ForcePathStyle": false,
     "UseServerSideEncryption": false
   }
 }
