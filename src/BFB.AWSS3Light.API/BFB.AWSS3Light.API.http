@@ -1,6 +1,0 @@
-@BFB.AWSS3Light.API.MongoDB_HostAddress = http://localhost:5111
-
-GET {{BFB.AWSS3Light.API.MongoDB_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

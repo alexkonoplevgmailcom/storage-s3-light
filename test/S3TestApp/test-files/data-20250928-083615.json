@@ -1,0 +1,11 @@
+{
+  "type": "test-data",
+  "created": "2025-09-28T08:36:15Z",
+  "id": "a3380e74-6bb1-43c4-a6af-d710d13ce4ef",
+  "description": "This is the second test file for S3 upload/download testing",
+  "version": 2,
+  "metadata": {
+    "source": "S3TestApp",
+    "environment": "development"
+  }
+}
