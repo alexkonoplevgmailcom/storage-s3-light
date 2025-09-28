@@ -15,10 +15,14 @@ class Program
         Console.WriteLine("🚀 NextGen PowerToys S3 Light - Test Application");
         Console.WriteLine("================================================");
         
-        // Build configuration
+        // Build configuration with environment support
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+        Console.WriteLine($"🌍 Environment: {environment}");
+        
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{environment.ToLower()}.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
             .Build();
 

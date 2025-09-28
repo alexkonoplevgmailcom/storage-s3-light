@@ -1,0 +1,11 @@
+{
+  "type": "test-data",
+  "created": "2025-09-28T11:17:26Z",
+  "id": "8a480df3-e74b-4d2a-b49d-9b59ad975938",
+  "description": "This is the second test file for NextGen PowerToys S3 Light testing",
+  "version": 2,
+  "metadata": {
+    "source": "NextGenPowerToys.S3TestApp",
+    "environment": "development"
+  }
+}

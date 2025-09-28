@@ -148,6 +148,32 @@ services.AddS3Storage(s3Settings =>
 });
 ```
 
+## ⚡ Testing & Validation
+
+### Standard MinIO Test
+Run the test suite to verify everything works:
+
+```bash
+./test.sh
+```
+
+### NetApp StorageGRID Test  
+Test with NetApp Trident S3 compatibility:
+
+```bash
+./test-netapp-s3.sh
+```
+
+Both test suites will:
+- ✅ Start the respective S3-compatible storage service
+- ✅ Build the test application with .NET 8
+- ✅ Run comprehensive S3 operations tests
+- ✅ Validate health checks and resilience patterns
+- ✅ Confirm universal S3 API compatibility
+
+**NetApp Console Access:** http://localhost:9011  
+**Credentials:** `netapp-admin` / `netapp-secure-password-2024`
+
 ## 🏥 Health Checks
 
 The library includes built-in health checks to monitor S3 connectivity:
