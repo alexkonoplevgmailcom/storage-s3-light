@@ -256,14 +256,75 @@ The library provides structured logging for all operations:
 
 ### Configuration Options
 
-| Setting | Description | Default |
-|---------|-------------|---------|
-| `AccessKeyId` | S3 access key | Required |
-| `SecretAccessKey` | S3 secret key | Required |
-| `Region` | AWS region | `us-east-1` |
-| `DefaultBucketName` | Default bucket | Required |
-| `ForcePathStyle` | Use path-style URLs | `false` |
-| `UseServerSideEncryption` | Enable SSE | `false` |
+#### S3Storage Settings
+
+| Setting | Description | Required | Default | Example |
+|---------|-------------|----------|---------|---------|
+| `AccessKeyId` | AWS S3 or MinIO access key identifier. Used for authentication with the S3 service. | ✅ Yes | None | `"AKIAIOSFODNN7EXAMPLE"` |
+| `SecretAccessKey` | AWS S3 or MinIO secret access key. Keep this secure and never expose in client-side code. | ✅ Yes | None | `"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"` |
+| `ServiceUrl` | Custom S3 endpoint URL. Use for MinIO or other S3-compatible services. Leave empty for AWS S3. | ❌ No | None | `"http://localhost:9000"` |
+| `DefaultBucketName` | Default S3 bucket name for file operations. Must exist or be created automatically. | ✅ Yes | None | `"my-app-storage"` |
+| `Region` | AWS region where your S3 bucket is located. Required for AWS S3, optional for MinIO. | ❌ No | `"us-east-1"` | `"us-west-2"` |
+| `ForcePathStyle` | Use path-style URLs (bucket.s3.amazonaws.com vs s3.amazonaws.com/bucket). Required for MinIO. | ❌ No | `false` | `true` for MinIO |
+| `UseServerSideEncryption` | Enable AWS S3 server-side encryption (AES256). Not supported by all S3-compatible services. | ❌ No | `false` | `true` |
+
+#### S3Resilience Settings
+
+| Setting | Description | Required | Default | Recommended |
+|---------|-------------|----------|---------|-------------|
+| `MaxRetryAttempts` | Maximum number of retry attempts for failed S3 operations before giving up. | ❌ No | `3` | `3-5` |
+| `BaseDelaySeconds` | Initial delay in seconds before the first retry attempt. Used as base for exponential backoff. | ❌ No | `1` | `1-2` |
+| `MaxDelaySeconds` | Maximum delay in seconds between retry attempts. Prevents excessive wait times. | ❌ No | `30` | `30-60` |
+| `UseExponentialBackoff` | Enable exponential backoff with jitter. Increases delay between retries to reduce server load. | ❌ No | `true` | `true` |
+| `CircuitBreakerFailureThreshold` | Number of consecutive failures before opening the circuit breaker. | ❌ No | `5` | `3-10` |
+| `CircuitBreakerDurationSeconds` | Time in seconds the circuit stays open before attempting recovery. | ❌ No | `30` | `30-120` |
+| `RequestTimeoutSeconds` | Maximum time in seconds to wait for a single S3 operation to complete. | ❌ No | `60` | `30-120` |
+
+#### Environment-Specific Examples
+
+**AWS S3 Production:**
+```json
+{
+  "S3Storage": {
+    "AccessKeyId": "AKIAIOSFODNN7EXAMPLE",
+    "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    "DefaultBucketName": "my-production-bucket",
+    "Region": "us-east-1",
+    "ForcePathStyle": false,
+    "UseServerSideEncryption": true
+  }
+}
+```
+
+**MinIO Development:**
+```json
+{
+  "S3Storage": {
+    "AccessKeyId": "minioadmin",
+    "SecretAccessKey": "minioadmin123",
+    "ServiceUrl": "http://localhost:9000",
+    "DefaultBucketName": "dev-bucket",
+    "Region": "us-east-1",
+    "ForcePathStyle": true,
+    "UseServerSideEncryption": false
+  }
+}
+```
+
+**High-Traffic Production:**
+```json
+{
+  "S3Resilience": {
+    "MaxRetryAttempts": 5,
+    "BaseDelaySeconds": 2,
+    "MaxDelaySeconds": 60,
+    "UseExponentialBackoff": true,
+    "CircuitBreakerFailureThreshold": 10,
+    "CircuitBreakerDurationSeconds": 120,
+    "RequestTimeoutSeconds": 90
+  }
+}
+```
 
 ## 🤝 Contributing
 

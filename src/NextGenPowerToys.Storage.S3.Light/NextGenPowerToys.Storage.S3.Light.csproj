@@ -7,7 +7,7 @@
     
     <!-- NuGet Package Metadata -->
     <PackageId>NextGenPowerToys.Storage.S3.Light</PackageId>
-    <Version>1.5.0</Version>
+    <Version>1.5.1</Version>
     <Authors>NextGen PowerToys Team</Authors>
     <Company>NextGen PowerToys</Company>
     <Description>Lightweight, resilient S3 storage library for .NET 8 with Polly resilience patterns, health checks, and comprehensive file management. Works with AWS S3, MinIO, and other S3-compatible storage.</Description>
@@ -17,8 +17,10 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-      NextGen PowerToys S3 Light v1.5.0 features:
+      NextGen PowerToys S3 Light v1.5.1 features:
+      - Comprehensive README with detailed configuration explanations
       - Production-ready with MIT License
       - StorageService class for cleaner API
       - File name-based identifiers for intuitive usage
@@ -51,6 +53,10 @@
   <PackageReference Include="Polly" Version="8.6.4" />
   <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.0" />
   <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
