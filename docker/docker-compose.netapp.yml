@@ -5,6 +5,7 @@ services:
   netapp-s3:
     image: minio/minio:latest
     container_name: netapp-s3-simulator
+    restart: unless-stopped
     ports:
       - "9010:9000"  # S3 API port (avoiding conflict with existing MinIO)
       - "9011:9001"  # Console port
@@ -31,6 +32,7 @@ services:
   trident-simulator:
     image: alpine:latest
     container_name: trident-simulator
+    restart: unless-stopped
     command: >
       sh -c "
         echo 'NetApp Trident CSI Plugin Simulator'

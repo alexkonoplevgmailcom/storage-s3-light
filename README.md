@@ -164,6 +164,29 @@ Test with NetApp Trident S3 compatibility:
 ./test-netapp-s3.sh
 ```
 
+### NetApp Container Management
+Manage persistent NetApp S3 containers:
+
+```bash
+# Start containers (persistent - will restart automatically)
+./netapp-s3-manager.sh start
+
+# Check status and connectivity
+./netapp-s3-manager.sh status
+
+# Open NetApp console in browser
+./netapp-s3-manager.sh console
+
+# View container logs
+./netapp-s3-manager.sh logs
+
+# Stop containers (data persists)
+./netapp-s3-manager.sh stop
+
+# Clean up everything (removes data)
+./netapp-s3-manager.sh clean
+```
+
 Both test suites will:
 - ✅ Start the respective S3-compatible storage service
 - ✅ Build the test application with .NET 8
@@ -172,7 +195,8 @@ Both test suites will:
 - ✅ Confirm universal S3 API compatibility
 
 **NetApp Console Access:** http://localhost:9011  
-**Credentials:** `netapp-admin` / `netapp-secure-password-2024`
+**Credentials:** `netapp-admin` / `netapp-secure-password-2024`  
+**Persistence:** Containers restart automatically, data preserved in Docker volumes
 
 ## 🏥 Health Checks
 

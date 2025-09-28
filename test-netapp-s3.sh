@@ -27,9 +27,13 @@ echo ""
 echo "🚀 Starting NetApp StorageGRID S3 Simulator..."
 cd "$(dirname "$0")"
 
-# Stop existing containers if running
-echo "🧹 Cleaning up existing containers..."
-docker-compose -f docker/docker-compose.netapp.yml down --remove-orphans || true
+# Check if containers are already running
+echo "🔍 Checking existing NetApp S3 containers..."
+if docker ps --filter "name=netapp-s3-simulator" --format "{{.Names}}" | grep -q "netapp-s3-simulator"; then
+    echo "✅ NetApp S3 containers already running - reusing existing setup"
+else
+    echo "🚀 Starting fresh NetApp S3 containers..."
+fi
 
 # Start NetApp S3 services
 echo "🔱 Starting NetApp S3 infrastructure..."
@@ -107,5 +111,12 @@ echo ""
 echo "🌐 NetApp S3 Console: http://localhost:9011"
 echo "🔑 Login: netapp-admin / netapp-secure-password-2024"
 echo ""
-echo "To stop NetApp S3 simulator:"
+echo "🔄 NetApp S3 containers will keep running for further testing!"
+echo "   - Container will restart automatically if stopped"
+echo "   - Data is persisted in Docker volume 'docker_netapp_s3_data'"
+echo ""
+echo "To stop NetApp S3 simulator manually:"
 echo "   docker-compose -f docker/docker-compose.netapp.yml down"
+echo ""
+echo "To restart NetApp S3 simulator:"
+echo "   docker-compose -f docker/docker-compose.netapp.yml up -d"
